@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DGF Multi-variables Prediction Model</title>
+    <style>
+        /* 重置和基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 标题样式 */
+        .page-title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background-color: #e74c3c;
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .page-title:hover {
+            color: #3498db;
+        }
+
+        .page-title:hover::after {
+            width: 150px;
+        }
+
+        /* 子标题样式 */
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+
+        /* 段落样式 */
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .page-title {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">DGF Multi-variables Prediction Model</h1>
+        
+        <h2>Welcome to Our Prediction Model</h2>
+        <p>This advanced model utilizes multiple variables to predict Delayed Graft Function (DGF) in kidney transplantation. Our tool is designed to assist medical professionals in making informed decisions.</p>
+        
+        <h2>How It Works</h2>
+        <p>By inputting various patient and donor data, our model calculates the probability of DGF occurrence. This can help in pre-transplant planning and post-transplant care strategies.</p>
+        
+        <a href="http://106.14.63.10:8099/assess/ai_work" class="btn">Start Prediction</a>
+    </div>
+</body>
+</html>

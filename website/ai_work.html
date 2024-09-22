@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DGF Multi-variables Prediction Model</title>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    {% load static %}
+    <link type="text/css" href="{% static 'css/public.css' %}  " rel="stylesheet">
+    <link type="text/css" href="{% static 'css/icon.css' %} " rel="stylesheet">
+    <link type="text/css" href="{% static 'css/index.css' %} " rel="stylesheet">
+
+    <script type="text/javascript">
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 768 * 100 + 'px';
+    </script>
+</head>
+<style>
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        background-color: #f8f8f8;
+        padding: 20px;
+        color: #333;
+    }
+
+    h1, h3 {
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+    }
+
+    h3 {
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+
+    input, select {
+        font-family: 'Times New Roman', Times, serif;
+        border-radius: 5px;
+        align-content: center;
+        background: #fff;
+        margin-left: 10px;
+        padding: 8px;
+        border: 1px solid #bdc3c7;
+        width: 150px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: #3498db;
+    }
+
+    .btn {
+        font-family: 'Times New Roman', Times, serif;
+        border-radius: 5px;
+        width: 200px;
+        padding: 12px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        margin: 10px;
+    }
+
+    .btn-download {
+        background-color: #3498db;
+    }
+
+    .btn-download:hover {
+        background-color: #2980b9;
+    }
+
+    .btn-calculate {
+        background-color: #2ecc71;
+    }
+
+    .btn-calculate:hover {
+        background-color: #27ae60;
+    }
+
+    .btn-contact {
+            background-color: #e74c3c;
+    }
+
+    .btn-contact:hover {
+            background-color: #c0392b;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn:active {
+        transform: translateY(1px);
+    }
+
+    .fixed-width {
+        width: 25%;
+        overflow: hidden;
+        white-space: normal;
+        display: inline-block;
+        text-align: right;
+        color: #555;
+        vertical-align: middle;
+        font-weight: 400;
+    }
+
+    .fixed-width2 {
+        width: 30%;
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+        text-align: right;
+        color: #555;
+        font-weight: 400;
+    }
+
+    .bottom-left {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .table td {
+        padding: 12px;
+        vertical-align: middle;
+    }
+
+    .donor-section {
+        background-color: #e6f3e6;
+    }
+
+    .recipient-section {
+        background-color: #f3e6e6;
+    }
+
+    .organ-section {
+        background-color: #e6e6f3;
+    }
+
+    .immuno-section {
+        background-color: #f3e6f3;
+    }
+
+    .matching-section {
+        background-color: #e6f3f3;
+    }
+
+    .other-section {
+        background-color: #f3f3e6;
+    }
+
+    .button-container {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .result-container {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .result-container input {
+        font-weight: 500;
+        color: #2c3e50;
+    }
+</style>
+<body>
+<h1 align="center">DGF Multi-variables Prediction Model</h1>
+
+<h3 align="center">Donor Baseline Characteristics</h3>
+<table class="table donor-section">
+    <tbody id="body">
+    <tr>
+        <td><span class="fixed-width">Donor age: </span><input type="number" value="55" id="donor_age"></td>
+        <td><span class="fixed-width">Donor sex: </span>
+            <select id="donor_sex">
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Donor height(cm): </span><input type="number" value="170" id="donor_height_" oninput="DBMI_Change();DBsa_change()"></td>
+        <td><span class="fixed-width">Donor weight(kg): </span><input type="number" value="70" id="donor_weight_" oninput="DBMI_Change();DBsa_change()"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Donor body<br>mass index: </span><input type="number" step="0.01" value="23.99"
+                                                                              id="dBMI"></td>
+        <td><span class="fixed-width">Donor body<br>surface area: </span><input type="number" step="0.01" value="1.78"
+                                                                                id="DBSa"></td>
+        <td><span class="fixed-width">Donor blood type: </span>
+            <select id="donor_blood_type">
+                <option value="0">O</option>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option value="3">AB</option>
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 align="center">Donor Laboratory Test Results</h3>
+<table class="table donor-section">
+    <tbody>
+    <tr>
+        <td><span class="fixed-width">Donor hypertension: </span>
+            <select id="DHp">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Donor diabetes: </span>
+            <select id="DDM">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Donor infectious<br>disease: </span>
+            <select id="Dinfect">
+                <option value="0">None</option>
+                <option value="1">Syphilis</option>
+                <option value="2">Hepatitis B</option>
+                <option value="3">Hepatitis B + Syphilis</option>
+                <option value="4">Hepatitis C</option>
+                <option value="5">Other</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Donor white<br>blood cell: </span><input type="number" step="0.1" value="23.7"
+                                                                               id="DWBC"></td>
+        <td><span class="fixed-width">Donor hemoglobin: </span><input type="number" step="0.1" value="12.0" id="Hb">
+        </td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Donor total protein: </span><input type="number" step="0.001" value="61.761"
+                                                                         id="DTp"></td>
+        <td><span class="fixed-width">Donor albumin: </span><input type="number" step="0.0001" value="34.5316"
+                                                                   id="DALB"></td>
+        <td><span class="fixed-width">Donor prothrombin time: </span><input type="number" step="0.1" value="12.0"
+                                                                            id="PT"></td>
+        <td><span class="fixed-width">Donor activated partial<br>thromboplastin time: </span><input type="number"
+                                                                                                    step="0.1"
+                                                                                                    value="30.0"
+                                                                                                    id="APPT"></td>
+        <td><span class="fixed-width">Donor blood<br>urea nitrogen: </span><input type="number" step="0.01" value="6.28"
+                                                                                  id="DBUN"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Donor serum<br>creatinine: </span><input type="number" step="0.1" value="184.9"
+                                                                               id="DsCr"></td>
+        <td><span class="fixed-width">Donor estimated GFR: </span><input type="number" step="0.0000001"
+                                                                         value="36.5874285" id="_DeGFR"></td>
+        <td><span class="fixed-width">Donor glucose: </span><input type="number" step="0.0001" value="8.0611" id="DGLu">
+        </td>
+        <td><span class="fixed-width">Donor potassium: </span><input type="number" step="0.01" value="3.93" id="DK">
+        </td>
+        <td><span class="fixed-width">Donor sodium: </span><input type="number" step="1" value="141" id="DNa"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Donor chlorine: </span><input type="number" step="0.1" value="104.2" id="DCl">
+        </td>
+        <td><span class="fixed-width">Donor bicarbonate: </span><input type="number" step="0.0001" value="22.4565"
+                                                                       id="DHCO3"></td>
+        <td><span class="fixed-width">Donor calcium: </span><input type="number" step="0.0001" value="2.1272" id="DCa2">
+        </td>
+        <td><span class="fixed-width">Donor magnesium: </span><input type="number" step="0.0001" value="0.8371"
+                                                                     id="DMg2"></td>
+        <td><span class="fixed-width">Donor phosphorus: </span><input type="number" step="0.0001" value="0.8002"
+                                                                      id="DP"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Donor urine pH: </span><input type="number" step="0.01" value="6.46" id="DuPH">
+        </td>
+        <td><span class="fixed-width">Donor urine<br>specific gravity: </span><input type="number" step="0.00001"
+                                                                                     value="1.02415" id="DSG"></td>
+        <td><span class="fixed-width">Donor urine<br>occult blood: </span>
+            <select id="DBLD">
+                <option value="0">Negative</option>
+                <option value="1">Trace</option>
+                <option value="2">1+</option>
+                <option value="3">2+</option>
+                <option value="4">3+</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Donor urine protein: </span>
+            <select id="DPRO">
+                <option value="0">Negative</option>
+                <option value="1">Trace</option>
+                <option value="2">1+</option>
+                <option value="3">2+</option>
+                <option value="4">3+</option>
+                <option value="5">4+</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Donor urine glucose: </span>
+            <select id="DuGLu">
+                <option value="0">Negative</option>
+                <option value="1">Trace</option>
+                <option value="2">1+</option>
+                <option value="3">2+</option>
+                <option value="4">3+</option>
+                <option value="5">4+</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Donor urine<br>red blood cells: </span><input type="number" step="0.0001"
+                                                                                    value="61.7776" id="DuRBC"></td>
+        <td><span class="fixed-width">Donor urine<br>white blood cells: </span><input type="number" step="0.0001"
+                                                                                      value="17.6377" id="DuWBC"></td>
+        <td><span class="fixed-width">Donor urine<br>epithelial cells: </span><input type="number" step="0.0001"
+                                                                                     value="8.2977" id="DuEC"></td>
+        <td><span class="fixed-width">Donor urine<br>physiological casts: </span><input type="number" step="0.0001"
+                                                                                        value="0.6983" id="Ducast"></td>
+        <td><span class="fixed-width">Donor urine bacteria: </span><input type="number" step="0.0001" value="71.8639"
+                                                                          id="Dubact"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 align="center">Recipient Baseline Characteristics</h3>
+<table class="table recipient-section">
+    <tbody>
+    <tr>
+        <td><span class="fixed-width">Recipient sex: </span>
+            <select id="sex">
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Recipient age: </span><input type="number" value="44" id="age"></td>
+        <td><span class="fixed-width">Recipient height(cm): </span><input type="number" value="175" id="Height_"></td>
+        <td><span class="fixed-width">Recipient weight(kg): </span><input type="number" value="76" id="Weight_"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Recipient body<br>mass index: </span><input type="number" step="0.01"
+                                                                                  value="24.82" id="rBMI"></td>
+        <td><span class="fixed-width">Recipient body<br>surface area: </span><input type="number" step="0.01"
+                                                                                    value="1.89" id="BSa"></td>
+        <td><span class="fixed-width">Recipient blood type: </span>
+            <select id="blood_type">
+                <option value="0">O</option>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option value="3">AB</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Nephropathy etiology: </span>
+            <select id="EN">
+                <option value="0">Unknown</option>
+                <option value="1">Nephritis</option>
+                <option value="2">Hypertension</option>
+                <option value="3">Diabetes</option>
+                <option value="4">IgA</option>
+                <option value="5">Polycystic kidney</option>
+                <option value="6">Other</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Preoperative<br>dialysis modality: </span>
+            <select id="Pdm">
+                <option value="0">No dialysis</option>
+                <option value="1">Hemodialysis</option>
+                <option value="2">Peritoneal dialysis</option>
+                <option value="3">Hemodialysis + Peritoneal dialysis</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Preoperative<br>dialysis time (months): </span><input type="number" value="0"
+                                                                                            id="Pdt"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 align="center">Recipient Laboratory Test Results</h3>
+<table class="table recipient-section">
+    <tbody>
+    <tr>
+        <td><span class="fixed-width">Preoperative blood<br>urea nitrogen: </span><input type="number" step="0.1"
+                                                                                         value="23.7" id="pBUN"></td>
+        <td><span class="fixed-width">Preoperative serum<br>creatinine: </span><input type="number" step="0.1"
+                                                                                      value="1209.2" id="pSCR"></td>
+        <td><span class="fixed-width">Preoperative potassium: </span><input type="number" step="0.01" value="6.74"
+                                                                            id="pk"></td>
+        <td><span class="fixed-width">Preoperative sodium: </span><input type="number" step="0.1" value="135.1"
+                                                                         id="pNa"></td>
+        <td><span class="fixed-width">Preoperative chlorine: </span><input type="number" step="0.1" value="95.5"
+                                                                           id="pCl"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Preoperative<br>bicarbonate: </span><input type="number" step="0.1" value="19.5"
+                                                                                 id="pHCO3"></td>
+        <td><span class="fixed-width">Preoperative calcium: </span><input type="number" step="0.01" value="2.41"
+                                                                          id="pCa2"></td>
+        <td><span class="fixed-width">Preoperative<br>phosphorus: </span><input type="number" step="0.01" value="2.08"
+                                                                                id="pP"></td>
+        <td><span class="fixed-width">Preoperative<br>magnesium: </span><input type="number" step="0.01" value="1.31"
+                                                                               id="pMg2"></td>
+        <td><span class="fixed-width">Preoperative brain<br>natriuretic peptide: </span><input type="number" step="0.01"
+                                                                                               value="329.38" id="pBNP">
+        </td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Preoperative systolic<br>blood pressure: </span><input type="number" value="120"
+                                                                                             id="PsBp"></td>
+        <td><span class="fixed-width">Preoperative pulse<br> pressure: </span><input type="number" value="100" id="Pdp">
+        </td>
+        <td><span class="fixed-width">Preoperative diastolic<br>blood pressure: </span><input type="number" value="80"
+                                                                                              id="psdp"></td>
+        <td><span class="fixed-width">Preoperative mean<br>arterial pressure: </span><input type="number" value="100"
+                                                                                            id="pMAP"></td>
+        <td><span class="fixed-width">Preoperative urine: </span>
+            <select id="Pu">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 align="center">Organ Preservation</h3>
+<table class="table organ-section">
+    <tbody>
+    <tr>
+        <td><span class="fixed-width">Kidney donor<br>profile index: </span><input type="number" step="0.01"
+                                                                                   value="66.75" id="kdpi"></td>
+        <td><span class="fixed-width">Kidney donor<br>risk index: </span><input type="number" step="0.0001"
+                                                                                value="1.1879" id="kdri"></td>
+        <td><span class="fixed-width">Renal artery variation: </span>
+            <select id="Renal_artery_variation">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Renal vein variation: </span>
+            <select id="Renal_vein_variation">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Cold ischemia time (h): </span><input type="number" step="0.1" value="7.7"
+                                                                            id="CIT"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 align="center">Immunology Related</h3>
+<table class="table immuno-section">
+    <tbody>
+    <tr>
+        <td><span class="fixed-width">Immunoinduction<br>protocols: </span>
+            <select id="Immunoinduction_protocols">
+                <option value="1">Simulect</option>
+                <option value="2">ATG</option>
+                <option value="3">Other</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Human leukocyte<br>antigen mismatch: </span><input type="number" min="0" max="6"
+                                                                                         value="3" id="HLA"></td>
+        <td><span class="fixed-width">Panel reactive<br>antibody: </span>
+            <select id="PRA">
+                <option value="0">Negative</option>
+                <option value="1">Positive</option>
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3 align="center">Matching Related</h3>
+<table class="table matching-section">
+    <tbody>
+    <tr>
+        <td><span class="fixed-width">Cross blood type: </span>
+            <select id="Cross_blood_type">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Sex matching: </span>
+            <select id="Sexto">
+                <option value="1">Male - Male</option>
+                <option value="2">Male - Female</option>
+                <option value="3">Female - Male</option>
+                <option value="4">Female - Female</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Age matching: </span>
+            <select id="Ageto">
+                <option value="1">>50 - >50</option>
+                <option value="2">>50 - <50</option>
+                <option value="3"><50 - <50</option>
+                <option value="4"><50 - >50</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Body mass index ratio: </span><input type="number" step="0.000001"
+                                                                           value="0.943934" id="rBMIr"></td>
+    </tr>
+    <tr>
+        <td><span class="fixed-width">Body mass index<br>ratio to one: </span>
+            <select id="BMIrto1">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+        <td><span class="fixed-width">Body surface<br>area ratio: </span><input type="number" step="0.00001"
+                                                                                value="1.03263" id="BSar"></td>
+        <td><span class="fixed-width">Body surface area<br>ratio to one: </span>
+            <select id="BSarto1">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="button-container">
+    <a href="/static/font/Instruction-C.pdf" target="_blank" class="btn btn-download">下载中文<br>说明</a>
+    <a href="/static/font/Instruction-E.pdf" target="_blank" class="btn btn-download">Download English<br>Instructions</a>
+</div>
+<div class="button-container">
+    <button onclick="get_result()" class="btn btn-calculate">Calculate</button>
+</div>
+
+<div class="result-container">
+    <div align="center">
+        <span class="fixed-width2">LightGBM Prediction Result：</span><input value="Na" id="result_lightgbm">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="fixed-width2">XGBoost Prediction Result： </span><input value="Na" id="result_xgboost">
+    </div>
+</div>
+
+<div class="button-container">
+    <a href="mailto:henryding55@gmail.com" class="btn btn-contact">Contact Us</a>
+</div>
+
+<img src="/static/image/bg.jpg" style="width: 600px;height: 100px" alt="Logo" class="bottom-left">
+</body>
+<script>
+    $(document).ready(function () {
+        $('#uploadButton').click(function () {
+            var formData = new FormData($('#fileUploadForm')[0]);
+            $.ajax({
+                url: 'upload_file',  // 替换成你的Django上传视图的URL
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    var lightgbm = document.getElementById('result_lightgbm');
+                    var xgboost = document.getElementById('result_xgboost');
+                    lightgbm.value = response.lightgbm;
+                    xgboost.value = response.xgboost;
+                    console.log('File uploaded successfully');
+                    alert("文件上传成功，已成功预测结果")
+                    // 处理成功响应
+                },
+                error: function () {
+                    console.log('文件解析失败');
+                    // 处理错误
+                }
+            });
+        });
+    });
+
+    function get_result() {
+        $.ajaxSettings.async = false;
+        var formdata = new FormData;
+        formdata.append("DGF", 1);
+        formdata.append("kdpi", $("#kdpi").val());
+        formdata.append("kdri", $("#kdri").val());
+        formdata.append("donor_age", $("#donor_age").val());
+        formdata.append("donor_sex", $("#donor_sex").val());
+        formdata.append("donor_height_", $("#donor_height_").val());
+        formdata.append("donor_weight_", $("#donor_weight_").val());
+        formdata.append("dBMI", $("#dBMI").val());
+        formdata.append("DBSa", $("#DBSa").val());
+        formdata.append("Dinfect", $("#Dinfect").val());
+        formdata.append("DWBC", $("#DWBC").val());
+        formdata.append("DHp", $("#DHp").val());
+        formdata.append("donor_blood_type", $("#donor_blood_type").val());
+        formdata.append("DTp", $("#DTp").val());
+        formdata.append("DALB", $("#DALB").val());
+        formdata.append("Hb", $("#Hb").val());
+        formdata.append("PT", $("#PT").val());
+        formdata.append("APPT", $("#APPT").val());
+        formdata.append("DBUN", $("#DBUN").val());
+        formdata.append("DsCr", $("#DsCr").val());
+        formdata.append("DuPH", $("#DuPH").val());
+        formdata.append("DSG", $("#DSG").val());
+        formdata.append("DBLD", $("#DBLD").val());
+        formdata.append("DPRO", $("#DPRO").val());
+        formdata.append("DK", $("#DK").val());
+        formdata.append("DNa", $("#DNa").val());
+        formdata.append("DCl", $("#DCl").val());
+        formdata.append("DHCO3", $("#DHCO3").val());
+        formdata.append("DCa2", $("#DCa2").val());
+        formdata.append("DMg2", $("#DMg2").val());
+        formdata.append("DP", $("#DP").val());
+        formdata.append("DGLu", $("#DGLu").val());
+        formdata.append("DuGLu", $("#DuGLu").val());
+        formdata.append("DuRBC", $("#DuRBC").val());
+        formdata.append("DuWBC", $("#DuWBC").val());
+        formdata.append("DuEC", $("#DuEC").val());
+        formdata.append("Ducast", $("#Ducast").val());
+        formdata.append("Dubact", $("#Dubact").val());
+        formdata.append("_DeGFR", $("#_DeGFR").val());
+        formdata.append("blood_type", $("#blood_type").val());
+        formdata.append("Cross_blood_type", $("#Cross_blood_type").val());
+        formdata.append("Renal_artery_variation", $("#Renal_artery_variation").val());
+        formdata.append("Renal_vein_variation", $("#Renal_vein_variation").val());
+        formdata.append("Immunoinduction_protocols", $("#Immunoinduction_protocols").val());
+        formdata.append("sex", $("#sex").val());
+        formdata.append("Sexto", $("#Sexto").val());
+        formdata.append("age", $("#age").val());
+        formdata.append("Ageto", $("#Ageto").val());
+        formdata.append("Height_", $("#Height_").val());
+        formdata.append("Weight_", $("#Weight_").val());
+        formdata.append("rBMI", $("#rBMI").val());
+        formdata.append("rBMIr", $("#rBMIr").val());
+        formdata.append("BMIrto1", $("#BMIrto1").val());
+        formdata.append("BSa", $("#BSa").val());
+        formdata.append("BSar", $("#BSar").val());
+        formdata.append("BSarto1", $("#BSarto1").val());
+        formdata.append("HLA", $("#HLA").val());
+        formdata.append("PRA", $("#PRA").val());
+        formdata.append("CIT", $("#CIT").val());
+        formdata.append("EN", $("#EN").val());
+        formdata.append("Pdm", $("#Pdm").val());
+        formdata.append("PsBp", $("#PsBp").val());
+        formdata.append("Pdp", $("#Pdp").val());
+        formdata.append("psdp", $("#psdp").val());
+        formdata.append("pMAP", $("#pMAP").val());
+        formdata.append("Pu", $("#Pu").val());
+        formdata.append("pBUN", $("#pBUN").val());
+        formdata.append("pSCR", $("#pSCR").val());
+        formdata.append("pk", $("#pk").val());
+        formdata.append("pNa", $("#pNa").val());
+        formdata.append("pCl", $("#pCl").val());
+        formdata.append("pHCO3", $("#pHCO3").val());
+        formdata.append("pCa2", $("#pCa2").val());
+        formdata.append("pP", $("#pP").val());
+        formdata.append("pMg2", $("#pMg2").val());
+        formdata.append("pBNP", $("#pBNP").val());
+        $.ajax({
+            type: "post",
+            url: "ai_work",
+            dataType: "json", //返回数据形式为json
+            data: formdata,
+            async: false,
+            cache: false,
+            processData: false,  // 告诉jquery不转换数据
+            contentType: false,  // 告诉jquery不设置内容格式
+            success: function (json) {
+                var lightgbm = document.getElementById('result_lightgbm');
+                var xgboost = document.getElementById('result_xgboost');
+
+                lightgbm.value = json.lightgbm;
+                xgboost.value = json.xgboost;
+
+            },
+            error: function (errorMsg) {
+                alert("不好意思，数据请求失败啦!");
+            }
+        });
+    }
+
+
+    function DBMI_Change() {
+    var donor_height = document.getElementById('donor_height_').value;
+    var donor_weight = document.getElementById('donor_weight_').value;
+    var tmp_dbmi = donor_weight * 10000 / (donor_height * donor_height);
+    document.getElementById('dBMI').value = tmp_dbmi.toFixed(2);
+    }
+
+    function DBsa_change() {
+    var donor_height = document.getElementById('donor_height_').value;
+    var donor_weight = document.getElementById('donor_weight_').value;
+    var tmp_dbsa = 0.0061 * donor_height + 0.0128 * donor_weight - 0.1529;
+    document.getElementById('DBSa').value = tmp_dbsa.toFixed(2);
+    }
+
+    function DeGFR_change() {
+    var donor_sex = document.getElementById('donor_sex').value;
+    var donor_age = document.getElementById('donor_age').value;
+    var donor_weight = document.getElementById('donor_weight_').value;
+    var DsCr = document.getElementById('DsCr').value;
+    var factor = (donor_sex == 1) ? 1.23 : 1.03;
+    var tmp_degfr = factor * (140 - donor_age) * donor_weight / DsCr;
+    document.getElementById('_DeGFR').value = tmp_degfr.toFixed(7);
+    }
+
+    function RBMI_change() {    
+    var height = document.getElementById('Height_').value;
+    var weight = document.getElementById('Weight_').value;
+    var tmp_rbmi = weight * 10000 / (height * height);
+    document.getElementById('rBMI').value = tmp_rbmi.toFixed(2);
+    }
+
+    function RBsa_change() {
+    var height = document.getElementById('Height_').value;
+    var weight = document.getElementById('Weight_').value;
+    var tmp_rbsa = 0.0061 * height + 0.0128 * weight - 0.1529;
+    document.getElementById('BSa').value = tmp_rbsa.toFixed(2);
+    }
+
+    function Ppp_change() {
+    var PsBp = document.getElementById('PsBp').value;
+    var psdp = document.getElementById('psdp').value;
+    var tmp_ppp = PsBp - psdp;
+    document.getElementById('Pdp').value = tmp_ppp;
+    }
+
+    function PMAP_change() {
+    var psdp = document.getElementById('psdp').value;
+    var Pdp = document.getElementById('Pdp').value;
+    var tmp_pmap = parseFloat(psdp) + (1/3) * parseFloat(Pdp);
+    document.getElementById('pMAP').value = tmp_pmap.toFixed(2);
+    }
+
+    function Cbt_change() {
+    var donor_blood_type = document.getElementById('donor_blood_type').value;
+    var blood_type = document.getElementById('blood_type').value;
+    var tmp_cbt = (donor_blood_type === blood_type) ? 0 : 1;
+    document.getElementById('Cross_blood_type').value = tmp_cbt;
+    }
+
+    function Sm_change() {
+    var donor_sex = document.getElementById('donor_sex').value;
+    var sex = document.getElementById('sex').value;
+    var tmp_sm;
+    if (donor_sex == 1 && sex == 1) tmp_sm = 1;
+    else if (donor_sex == 1 && sex == 2) tmp_sm = 2;
+    else if (donor_sex == 2 && sex == 1) tmp_sm = 3;
+    else tmp_sm = 4;
+    document.getElementById('Sexto').value = tmp_sm;
+    }
+
+    function Am_change() {
+    var donor_age = document.getElementById('donor_age').value;
+    var age = document.getElementById('age').value;
+    var tmp_am;
+    if (donor_age >= 50 && age >= 50) tmp_am = 1;
+    else if (donor_age >= 50 && age < 50) tmp_am = 2;
+    else if (donor_age < 50 && age >= 50) tmp_am = 3;
+    else tmp_am = 4;
+    document.getElementById('Ageto').value = tmp_am;
+    }
+
+    function BMIr_change() {
+    var dBMI = document.getElementById('dBMI').value;
+    var rBMI = document.getElementById('rBMI').value;
+    var tmp_bmir = dBMI / rBMI;
+    document.getElementById('rBMIr').value = tmp_bmir.toFixed(6);
+    }
+
+    function BMIrto1_change() { 
+    var rBMIr = document.getElementById('rBMIr').value;
+    var tmp_bmirto1 = (rBMIr < 1) ? 0 : 1;
+    document.getElementById('BMIrto1').value = tmp_bmirto1;
+    }
+
+    function BSar_change() {
+    var DBSa = document.getElementById('DBSa').value;
+    var BSa = document.getElementById('BSa').value;
+    var tmp_bsar = DBSa / BSa;
+    document.getElementById('BSar').value = tmp_bsar.toFixed(5);
+    }
+
+    function BSarto1_change() {
+    var BSar = document.getElementById('BSar').value;
+    var tmp_bsarto1 = (BSar < 1) ? 0 : 1;
+    document.getElementById('BSarto1').value = tmp_bsarto1;
+    }
+</script>
+</html>
